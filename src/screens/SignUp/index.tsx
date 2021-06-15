@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/core';
 import React, { useContext, useState } from 'react';
 import { Platform } from 'react-native';
 import { AuthContext } from '../../contexts/auth';
@@ -6,25 +5,22 @@ import { AuthContext } from '../../contexts/auth';
 import { 
   Wrapper, 
   Container,
-  Logo,
   AreaInput,
   Input,
   SubmitButton,
   SubmitText,
-  Link,
-  LinkText
 } from './styles';
 
-const SignIn: React.FC = () => {
+const SignUp: React.FC = () => {
 
-  const navigation = useNavigation();
-
+  const [nome, setNome] = useState<string>();
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
-  const { user } = useContext(AuthContext);
 
-  function login() {
-    
+  const { signUp } = useContext(AuthContext);
+  
+  function handleSignUp() {
+    signUp(email, password, nome)
   }
 
   return( 
@@ -32,8 +28,15 @@ const SignIn: React.FC = () => {
       <Container
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <Logo source={require('../../assets/Logo.png')} />
-
+        <AreaInput>
+          <Input 
+            placeholder="Nome"
+            autoCorrect={false}
+            autoCapitalize="none"  
+            value={nome}
+            onChangeText={(text) => setNome(text)}
+          />
+        </AreaInput>
         <AreaInput>
           <Input 
             placeholder="Email"
@@ -53,17 +56,13 @@ const SignIn: React.FC = () => {
           />
         </AreaInput>
 
-        <SubmitButton onPress={login}>
-          <SubmitText>Acessar</SubmitText>
+        <SubmitButton onPress={handleSignUp}>
+          <SubmitText>Cadastrar</SubmitText>
         </SubmitButton>
-        <Link onPress={() => (
-          navigation.navigate('SignUp')
-        )}>
-          <LinkText>Criar uma conta !</LinkText>
-        </Link>
+        
       </Container>
     </Wrapper>
   );
 }
 
-export default SignIn;
+export default SignUp;
